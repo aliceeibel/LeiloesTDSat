@@ -55,6 +55,29 @@ conn = new conectaDAO().connectDB();
     }  
     }
     
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+    conn = new conectaDAO().connectDB();
+    
+    try {
+        String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+        prep = conn.prepareStatement(sql);
+        resultset = prep.executeQuery();
+        
+        while (resultset.next()) {
+            ProdutosDTO produto = new ProdutosDTO();
+            produto.setId(resultset.getInt("id"));
+            produto.setNome(resultset.getString("nome"));
+            produto.setValor(resultset.getInt("valor"));
+            produto.setStatus(resultset.getString("status"));
+            
+            listagem.add(produto);
+        }
+    } catch (SQLException erro) {
+        JOptionPane.showMessageDialog(null, "ProdutosDAO Listar Vendidos: " + erro);
+    }
+    
+    return listagem;
+}
 
     public ArrayList<ProdutosDTO> listarProdutos(){
         conn = new conectaDAO().connectDB();

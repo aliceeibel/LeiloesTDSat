@@ -1,3 +1,8 @@
+
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -14,6 +19,7 @@ public class vendasVIEW extends javax.swing.JFrame {
      */
     public vendasVIEW() {
         initComponents();
+        atualizarTabela ();
     }
 
     /**
@@ -140,4 +146,23 @@ public class vendasVIEW extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable listaVendas;
     // End of variables declaration//GEN-END:variables
+
+
+    String[] column = {"ID", "NOME", "VALOR", "STATUS"};
+    public void atualizarTabela(){
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            DefaultTableModel model =  new DefaultTableModel(column, 0);
+            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutosVendidos();
+
+            for (ProdutosDTO produto : listagem) {
+                String[] rowData = {String.valueOf(produto.getId()), produto.getNome(), 
+                    String.valueOf(produto.getValor()), produto.getStatus()};
+                model.addRow(rowData);
+            }
+            listaVendas.setModel(model);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar produtos vendidos: " + e.getMessage());
+        }
+    }
 }
